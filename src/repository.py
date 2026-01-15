@@ -1,6 +1,3 @@
-# src/repository.py
-from datetime import datetime
-
 class TaskRepository:
     def __init__(self):
         self.tasks = []
@@ -11,30 +8,36 @@ class TaskRepository:
             return [t for t in self.tasks if t["priority"] == priority]
         return self.tasks
 
+    def get_task(self, task_id):
+        for task in self.tasks:
+            if task["id"] == task_id:
+                return task
+        return None
+
     def create_task(self, data):
         task = {
             "id": self.counter,
             "title": data["title"],
             "description": data["description"],
-            "priority": data["priority"],  # e.g., High, Medium, Low
-            "status": data["status"],      # To Do, In Progress, Done
+            "priority": data["priority"],
+            "status": data["status"],
             "owner": data["owner"],
-            "due_date": data.get("due_date")  # mudança de escopo
+            "due_date": data["due_date"],
         }
         self.tasks.append(task)
         self.counter += 1
         return task
 
     def update_task(self, task_id, data):
-        for t in self.tasks:
-            if t["id"] == task_id:
-                t.update({k: v for k, v in data.items() if k in t})
-                return t
+        for task in self.tasks:
+            if task["id"] == task_id:
+                task.update(data)
+                return task
         return None
 
     def delete_task(self, task_id):
-        for t in self.tasks:
-            if t["id"] == task_id:
-                self.tasks.remove(t)
+        for task in self.tasks:
+            if task["id"] == task_id:
+                self.tasks.remove(task)
                 return True
         return False
